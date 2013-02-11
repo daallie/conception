@@ -4,10 +4,11 @@ import java.awt.event.ActionListener;
 
 public abstract class Entity implements ActionListener{
 	private int HP;
+	private static final int maxHP = 100;
 	private Point coordinates;
 	private double durability;
-	private final double maxDurability = 0.0;
-	private final double minDurability = 1.0;
+	private static final double maxDurability = 0.0;
+	private static final double minDurability = 1.0;
 	
 	/**
 	 * Default Constructor
@@ -49,34 +50,17 @@ public abstract class Entity implements ActionListener{
 		this(a);
 		setLocation(x,y);
 	}
-	
-	/**
-	 * Decrease HP by 1
-	 */
- 	public void decrementHP()
-	{
-		HP = HP - 1;
-		checkHP();
-	}
-	
-	/**
-	 * Increase HP by 1
-	 */
-	public void incrementHP()
-	{
-		HP = HP + 1;
-	}
-	
+
 	/**
 	 * 
-	 * @param i Amount to Decrease HP
+	 * @param i Amount to Change HP
 	 */
 	public void modifyHP(int i)
 	{
 		HP = HP + i;
 		checkHP();
 	}
-
+	
 	/**
 	 * @return Current HP
 	 */
