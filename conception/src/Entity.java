@@ -1,7 +1,8 @@
 import java.awt.Point;
+import java.awt.event.ActionListener;
 
 
-public abstract class Entity {
+public abstract class Entity implements ActionListener{
 	private int HP;
 	private Point coordinates;
 	private double durability;
@@ -55,6 +56,7 @@ public abstract class Entity {
  	public void decrementHP()
 	{
 		HP = HP - 1;
+		checkHP();
 	}
 	
 	/**
@@ -69,18 +71,10 @@ public abstract class Entity {
 	 * 
 	 * @param i Amount to Decrease HP
 	 */
-	public void decreaseHP(int i)
+	public void modifyHP(int i)
 	{
-		HP = HP - i;
-	}
-	
-	/**
-	 * 
-	 * @param i Amount to Increase HP
-	 */
-	public void increaseHP(int i)
-	{
-		HP = HP - i;
+		HP = HP + i;
+		checkHP();
 	}
 
 	/**
@@ -91,6 +85,16 @@ public abstract class Entity {
 		return HP;
 	}
 
+	/**
+	 * TODO
+	 * Check HP <= 0
+	 */
+	private void checkHP()
+	{
+		if(HP <= 0)
+			noHP();
+	}
+	
 	/**
 	 * @param a Coordinate Location of Current Acre
 	 */
@@ -159,9 +163,9 @@ public abstract class Entity {
 		if(durability > maxDurability)
 			durability = maxDurability;
 		else if(durability < minDurability)
-			durability = minDurability;
+			noDurability();
 	}
 	
-	public abstract void death();
+	public abstract void noHP();
 	public abstract void noDurability();
 }
