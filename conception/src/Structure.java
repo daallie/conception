@@ -8,5 +8,4 @@ public abstract class Structure extends Entity {
 	private ArrayList<Unit> workers;
 	
 	
-	
 }

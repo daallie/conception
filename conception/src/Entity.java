@@ -22,7 +22,7 @@ public abstract class Entity implements ActionListener{
 	}
 	
 	/**
-	 * @param a Entity Hitpoints
+	 * @param a Entity HP
 	 */
 	public Entity(int a)
 	{
@@ -31,7 +31,7 @@ public abstract class Entity implements ActionListener{
 	}
 	
 	/**
-	 * @param a Entity Hitpoints
+	 * @param a Entity HP
 	 * @param c Entity Coordinate Location
 	 */
 	public Entity(int a, Point c)

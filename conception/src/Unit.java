@@ -9,5 +9,5 @@ public abstract class Unit extends Entity
 	protected byte honor;
 	protected byte speed;
 	
-
+	public abstract boolean move();
 }

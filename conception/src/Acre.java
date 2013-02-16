@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 
 public class Acre {
 	private int biome;
@@ -9,10 +11,15 @@ public class Acre {
 	private int oreDepth;
 	private int lumberType;
 	private int lumberQuantity;
+	private int x;
+	private int y;
 	private Acre north;
 	private Acre south;
 	private Acre east;
 	private Acre west;
+	private Structure structure;
+	private ArrayList<Unit> units;
+		
 	
 	/**
 	 * @param a Index of Biome Type
@@ -51,4 +58,67 @@ public class Acre {
 		east = e;
 		west = w;
 	}
+
+	/**
+	 * @param x
+	 * @param y
+	 */
+	public void setLocation(int x, int y)
+	{
+		this.x = x;
+		this.y = y;
+	}
+	
+	/**
+	 * @return Acre to North
+	 */
+	public Acre getNorth()
+	{
+		return north;
+	}
+	
+	/**
+	 * @return Acre to South
+	 */
+	public Acre getSouth()
+	{
+		return south;
+	}
+	
+	/**
+	 * @return Acre to East
+	 */
+	public Acre getEast()
+	{
+		return east;
+	}
+	
+	/**
+	 * @return Acre to West
+	 */
+	public Acre getWest()
+	{
+		return west;
+	}
+
+	/**
+	 * @param a Unit to Add to Acre
+	 */
+	public void addUnit(Unit a)
+	{
+		units.add(a);
+		a.setLocation(x,y);
+	}
+	
+	/**
+	 * @param a Unit to Remove from Acre
+	 * @return
+	 */
+	public boolean removeUnit(Unit a)
+	{
+		return units.remove(a);
+	}
+	
+	
+	
 }
