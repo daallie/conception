@@ -118,6 +118,23 @@ public class Acre {
 	{
 		return units.remove(a);
 	}
+
+	/**
+	 * @return the structure
+	 */
+	public Structure getStructure() {
+		return structure;
+	}
+
+	/**
+	 * @param structure the structure to set
+	 */
+	public boolean setStructure(Structure structure) {
+		if(this.structure != null)
+			return false;
+		this.structure = structure;
+		return true;
+	}
 	
 	
 	
