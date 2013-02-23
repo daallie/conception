@@ -48,7 +48,7 @@ public class Game extends StateBasedGame
 			// Sets Up Window and Puts Tital at the top of screen
 			appgc = new AppGameContainer(new Game(NAME));
 			// This set the Size of the screen (x, y, fullscreen)
-			appgc.setDisplayMode(800, 600, false);
+			appgc.setDisplayMode(1024, 768, false);
 			
 			// Starts the Game
 			appgc.start();
