@@ -21,6 +21,11 @@ public class Acre {
 	private ArrayList<Unit> units;
 		
 	
+	public Acre()
+	{
+		this(0,0,50,50,0,0,50,0,0);
+	}
+	
 	/**
 	 * @param a Index of Biome Type
 	 * @param b Elevation Value (-100,100)
@@ -28,7 +33,7 @@ public class Acre {
 	 * @param d Fertility Value (0,100)
 	 * @param e Index of Ore Type
 	 * @param f Quantity of Ore
-	 * @param g Depth of Ore (-100,100) < Elevation
+	 * @param g Depth of Ore (-100,100) <= Elevation
 	 * @param h Index of Lumber Type
 	 * @param i Quantity of Lumber
 	 */
@@ -136,6 +141,13 @@ public class Acre {
 		return true;
 	}
 	
+	/**
+	 * Return Location in format (x,y)
+	 */
+	public String toString()
+	{
+		return "(" + x + "," + y + ")";
+	}
 	
 	
 }
