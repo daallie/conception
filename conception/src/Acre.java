@@ -2,7 +2,14 @@ import java.util.ArrayList;
 
 
 public class Acre {
-	private int biome;
+	/**
+	 * TODO Fix Null Biome Pointer
+	 * Remove the biomeID variable here
+	 */
+	public int biomeID;
+	private Biome myBiome;
+	private boolean inBiome = false;
+	private boolean checked = false;
 	private int elevation;
 	private int humidity;
 	private int fertility;
@@ -23,31 +30,61 @@ public class Acre {
 	
 	public Acre()
 	{
-		this(0,0,50,50,0,0,50,0,0);
+		this(0,50,50,0,0,0,0,0);
+		myBiome = null;
+	}
+	
+	public boolean isChecked()
+	{
+		return checked;
+	}
+	
+	public void resetCheck()
+	{
+		checked = false;
+	}
+	
+	public boolean inBiome()
+	{
+		return myBiome!=null;
+	}
+
+	public Biome getBiome()
+	{
+		return myBiome;
+	}
+	
+	public boolean biomeClaim(Biome a)
+	{
+		checked = true;
+		if(inBiome)
+			return false;
+		biomeID = a.getID();
+		myBiome = a;
+		inBiome = true;
+		return true;
 	}
 	
 	/**
-	 * @param a Index of Biome Type
-	 * @param b Elevation Value (-100,100)
-	 * @param c Humidity Value (0,100)
-	 * @param d Fertility Value (0,100)
-	 * @param e Index of Ore Type
-	 * @param f Quantity of Ore
-	 * @param g Depth of Ore (-100,100) <= Elevation
-	 * @param h Index of Lumber Type
-	 * @param i Quantity of Lumber
+	 * @param a Elevation Value (-100,100)
+	 * @param b Humidity Value (0,100)
+	 * @param c Fertility Value (0,100)
+	 * @param d Index of Ore Type
+	 * @param e Quantity of Ore
+	 * @param f Depth of Ore (-100,100) <= Elevation
+	 * @param g Index of Lumber Type
+	 * @param h Quantity of Lumber
 	 */
-	public Acre(int a, int b, int c, int d, int e, int f, int g, int h, int i)
+	public Acre(int a, int b, int c, int d, int e, int f, int g, int h)
 	{
-		biome = a;
-		elevation = b;
-		humidity = c;
-		fertility = d;
-		oreType = e;
-		oreQuantity = f;
-		oreDepth = g;
-		lumberType = h;
-		lumberQuantity = i;
+		elevation = a;
+		humidity = b;
+		fertility = c;
+		oreType = d;
+		oreQuantity = e;
+		oreDepth = f;
+		lumberType = g;
+		lumberQuantity = h;
 	}
 
 	/**
@@ -141,12 +178,20 @@ public class Acre {
 		return true;
 	}
 	
+	
+	public String location()
+	{
+		return x + " " + y;
+	}
+	
+	
+	
 	/**
 	 * Return Location in format (x,y)
 	 */
 	public String toString()
 	{
-		return "(" + x + "," + y + ")";
+		return "" + biomeID + "\n" + x + " " +y;
 	}
 	
 	

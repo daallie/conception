@@ -52,6 +52,7 @@ public class Game extends StateBasedGame
 			
 			// Starts the Game
 			appgc.start();
+			
 		} catch (SlickException e)
 		{
 			e.printStackTrace();
