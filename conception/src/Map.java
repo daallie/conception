@@ -9,6 +9,7 @@ public class Map {
 
 	private Acre[][] grid;
 	private int size;
+	private int power;
 	private int x;
 	private int y;
 	private int acresTouched = 0;
@@ -20,6 +21,7 @@ public class Map {
 	
 	public Map(int area)
 	{
+		power = area;
 		size = (int) (Math.pow(2,area) + 1);
 		System.out.println("Generating " + (size*size) + " Acres");
 		grid = new Acre[size][size];
@@ -43,6 +45,7 @@ public class Map {
 		generateBiomes();
 		generateOceans();
 		generateLakes();
+		generateMountains();
 	}
 	
 
@@ -267,14 +270,16 @@ public class Map {
 		
 		// Recursive Call
 		length = length/2;
+		double newSpread = spread/(1 + 1/(power/5.0));
+		System.out.println("New Spread " + newSpread);
 		// Bottom Right
-		generateBiomesHelper(grid[x+length][y+length], length, spread/2.5, generator);
+		generateBiomesHelper(grid[x+length][y+length], length, newSpread, generator);
 		// Bottom Left
-		generateBiomesHelper(grid[x-length][y+length], length, spread/2.5, generator);
+		generateBiomesHelper(grid[x-length][y+length], length, newSpread, generator);
 		// Top Right
-		generateBiomesHelper(grid[x+length][y-length], length, spread/2.5, generator);
+		generateBiomesHelper(grid[x+length][y-length], length, newSpread, generator);
 		// Top Left
-		generateBiomesHelper(grid[x-length][y-length], length, spread/2.5, generator);
+		generateBiomesHelper(grid[x-length][y-length], length, newSpread, generator);
 	}
 
 	/**
@@ -373,6 +378,48 @@ public class Map {
 		generateLakesHelper(lake.getWest(),i);
 	}
 
+	/**
+	 * Method to generate Mountains and effect fertility and Temperature on those areas
+	 */
+	private void generateMountains()
+	{
+		// Get Max Height
+		int max = 0;
+		int maxX = 0;
+		int maxY = 0;
+		for(int i = 0; i<size; i++)
+		{
+			for(int j = 0; j<size; j++)
+			{
+				if(grid[i][j].getElevation()>max)
+				{
+					max = grid[i][j].getElevation();
+					maxX = i;
+					maxY = j;
+				}
+			}
+		}
+		System.out.println("Highest Elevation: " + max + "(" +  maxX + ", " + maxY + ")");
+		// If there are high mountains
+		if(max > 10)
+		{
+			ArrayList<Acre> mountains = new ArrayList<Acre>();
+			for(int i = 0; i<size; i++)
+			{
+				for(int j = 0; j<size; j++)
+				{
+					if(grid[i][j].getElevation()>10)
+						mountains.add(grid[i][j]);
+				}
+			}
+			for(Acre mountain: mountains)
+			{
+				mountain.alterFertility(Math.pow(0.95,(mountain.getElevation()-10)));
+				mountain.alterTemperature(Math.pow(0.96,(mountain.getElevation()-10)));
+			}
+		}
+	}
+	
 	/**
 	 * Part of the Original Biome Code
 	 * Currently seen as depricated

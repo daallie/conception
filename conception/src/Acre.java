@@ -12,6 +12,7 @@ public class Acre {
 	private boolean checked = false;
 	private boolean isOcean = false;
 	private int elevation;
+	private int temperature;
 	private int humidity;
 	private int fertility;
 	private int oreType;
@@ -31,7 +32,7 @@ public class Acre {
 	
 	public Acre()
 	{
-		this(-1,50,30,0,0,0,0,0);
+		this(-1,50,30,0,0,0,0,0,50);
 		myBiome = null;
 	}
 	
@@ -45,7 +46,7 @@ public class Acre {
 	 * @param g Index of Lumber Type
 	 * @param h Quantity of Lumber
 	 */
-	public Acre(int a, int b, int c, int d, int e, int f, int g, int h)
+	public Acre(int a, int b, int c, int d, int e, int f, int g, int h, int i)
 	{
 		elevation = a;
 		humidity = b;
@@ -55,6 +56,7 @@ public class Acre {
 		oreDepth = f;
 		lumberType = g;
 		lumberQuantity = h;
+		temperature = i;
 	}
 	
 	public boolean isChecked()
@@ -277,5 +279,27 @@ public class Acre {
 	public void setOcean(boolean b)
 	{
 		isOcean = b;
+	}
+
+	/**
+	 * 
+	 * @return Acre Temperature (Not current just average)
+	 */
+	public int getTemperature()
+	{
+		return temperature;
+	}
+	
+	/**
+	 * 
+	 * @param i Multiplier to modify the Temperature
+	 */
+	public void alterTemperature(double i)
+	{
+		temperature *= i;
+		if(temperature>100)
+			temperature = 100;
+		else if(temperature<0)
+			temperature = 0;
 	}
 }
