@@ -2,6 +2,7 @@
  * Write Map Generation Code
  */
 
+import java.util.Random;
 
 public class Map {
 
@@ -9,8 +10,7 @@ public class Map {
 	private int size;
 	private int x;
 	private int y;
-	private int numBiomes = 4;
-	private Biome[] biomes;
+	private int acresTouched = 0;
 	
 	public Map()
 	{
@@ -42,7 +42,6 @@ public class Map {
 			}
 		linkAcres();
 		generateBiomes();
-		System.out.println("Unclaimed: " + numUnclaimed());
 	}
 	
 	/**
@@ -189,45 +188,79 @@ public class Map {
 
 	private void generateBiomes()
 	{
-		biomes = new Biome[numBiomes];
-		// Set Poles
-		biomes[0] = new Biome(1);
-		biomes[0].setCenter(grid[0][0]);
-		biomes[1] = new Biome(2);
-		biomes[1].setCenter(grid[size/2][size/2]);
-		// Get Centers
-		for(int i = 2; i<numBiomes; i++)
-		{
-			// Generate New Biome
-			biomes[i] = new Biome(i+1);
-			// Get Center
-			while(!biomes[i].canGrow())
-			{
-				// Generate Random Numbers
-				int x = (int) (Math.random() * size);
-				int y = (int) (Math.random() * size);
-				biomes[i].setCenter(grid[x][y]);
-			}
-		}
-		boolean growth = true;
-		while(growth)
-		{
-			resetChecks();
-			boolean temp = false;
-			for(int i = 0; i<numBiomes && !temp; i++)
-			{
-				if(biomes[i].canGrow())
-					temp = true;
-			}
-			if(temp)
-			{
-				// Get Random Biome
-				int b = (int) (Math.random() * numBiomes);
-				System.out.println("Growing Biome " + (b+1) + " ");
-				System.out.println(biomes[b].grow());
-			}
-			growth = temp;
-		}
+		// Random Generator
+		Random generator = new Random();
+		// Set the Corners to the same random height
+		int temp = (int) (generator.nextGaussian() * 50);
+		grid[0][0].setElevation(temp);
+		grid[0][size-1].setElevation(temp);
+		grid[size-1][0].setElevation(temp);
+		grid[size-1][size-1].setElevation(temp);
+		acresTouched +=4;
+		generateBiomesHelper(grid[(size-1)/2][(size-1)/2], (size-1)/2, 1, generator);
+		System.out.println(size*size);
+		System.out.println(acresTouched);
+	}
+	
+	private void generateBiomesHelper(Acre center, int length, double spread, Random generator)
+	{
+		// Base Case
+		if(length<1)
+			return;
+		
+		// Square Step
+		// Get Corner Values
+		int x = center.getX();
+		int y = center.getY();
+		System.out.println("Centered " + x + " " + y);
+		// Bottom Right Corner
+		int average = grid[x+length][y+length].getElevation();
+		// Bottom Left Corner
+		average += grid[x-length][y+length].getElevation();
+		// Top Right Corner
+		average += grid[x+length][y-length].getElevation();
+		// Top Left Corner
+		average += grid[x-length][y-length].getElevation();
+		average = average/4;
+		// Set New Elevation
+		center.setElevation((int) (average + (generator.nextGaussian()) * (50 * spread)));
+		System.out.println("Set Elevation: " + center.getElevation() + " Using: " + average + " Spread: " + spread);
+		
+		// Diamond Step
+		average = (center.getElevation() + average)/4;
+		
+		// Set New Elevation South Point
+		grid[x][y+length].setElevation((int) (average + (generator.nextGaussian()) * (50 * spread)));
+		System.out.println("Corner " + x + " " + (y+length));
+		System.out.println("Set Elevation: " + grid[x][y+length].getElevation() + " Using: " + average + " Spread: " + spread);
+
+		// Set New Elevation North Point
+		grid[x][y-length].setElevation((int) (average + (generator.nextGaussian()) * (50 * spread)));
+		System.out.println("Corner " + x + " " + (y-length));
+		System.out.println("Set Elevation: " + grid[x][y-length].getElevation() + " Using: " + average + " Spread: " + spread);
+		
+		// Set New Elevation East Point
+		grid[x+length][y].setElevation((int) (average + (generator.nextGaussian()) * (50 * spread)));
+		System.out.println("Corner " + (x+length) + " " + (y));
+		System.out.println("Set Elevation: " + grid[x+length][y].getElevation() + " Using: " + average + " Spread: " + spread);
+		
+		// Set New Elevation West Point
+		grid[x-length][y].setElevation((int) (average + (generator.nextGaussian()) * (50 * spread)));
+		System.out.println("Corner " + (x-length) + " " + (y));
+		System.out.println("Set Elevation: " + grid[x-length][y].getElevation() + " Using: " + average + " Spread: " + spread);
+		
+		acresTouched += 5;
+		
+		// Recursive Call
+		length = length/2;
+		// Bottom Right
+		generateBiomesHelper(grid[x+length][y+length], length, spread/2, generator);
+		// Bottom Left
+		generateBiomesHelper(grid[x-length][y+length], length, spread/2, generator);
+		// Top Right
+		generateBiomesHelper(grid[x+length][y-length], length, spread/2, generator);
+		// Top Left
+		generateBiomesHelper(grid[x-length][y-length], length, spread/2, generator);
 	}
 
 	private void resetChecks()
@@ -240,15 +273,5 @@ public class Map {
 				grid[i][j].resetCheck();
 			}
 		}
-	}
-
-	private int numUnclaimed()
-	{
-		int temp = 0;
-		for(int i = 0; i<size; i++)
-			for(int j = 0; j<size; j++)
-				if(grid[i][j].biomeID == 0)
-					temp ++;
-		return temp;
 	}
 }

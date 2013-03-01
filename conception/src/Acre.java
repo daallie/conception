@@ -30,8 +30,30 @@ public class Acre {
 	
 	public Acre()
 	{
-		this(0,50,50,0,0,0,0,0);
+		this(-5,50,50,0,0,0,0,0);
 		myBiome = null;
+	}
+	
+	/**
+	 * @param a Elevation Value (-100,100)
+	 * @param b Humidity Value (0,100)
+	 * @param c Fertility Value (0,100)
+	 * @param d Index of Ore Type
+	 * @param e Quantity of Ore
+	 * @param f Depth of Ore (-100,100) <= Elevation
+	 * @param g Index of Lumber Type
+	 * @param h Quantity of Lumber
+	 */
+	public Acre(int a, int b, int c, int d, int e, int f, int g, int h)
+	{
+		elevation = a;
+		humidity = b;
+		fertility = c;
+		oreType = d;
+		oreQuantity = e;
+		oreDepth = f;
+		lumberType = g;
+		lumberQuantity = h;
 	}
 	
 	public boolean isChecked()
@@ -63,28 +85,6 @@ public class Acre {
 		myBiome = a;
 		inBiome = true;
 		return true;
-	}
-	
-	/**
-	 * @param a Elevation Value (-100,100)
-	 * @param b Humidity Value (0,100)
-	 * @param c Fertility Value (0,100)
-	 * @param d Index of Ore Type
-	 * @param e Quantity of Ore
-	 * @param f Depth of Ore (-100,100) <= Elevation
-	 * @param g Index of Lumber Type
-	 * @param h Quantity of Lumber
-	 */
-	public Acre(int a, int b, int c, int d, int e, int f, int g, int h)
-	{
-		elevation = a;
-		humidity = b;
-		fertility = c;
-		oreType = d;
-		oreQuantity = e;
-		oreDepth = f;
-		lumberType = g;
-		lumberQuantity = h;
 	}
 
 	/**
@@ -187,11 +187,53 @@ public class Acre {
 	
 	
 	/**
-	 * Return Location in format (x,y)
+	 * Return Location in format
+	 * x y
+	 * elevation
 	 */
 	public String toString()
 	{
-		return "" + biomeID + "\n" + x + " " +y;
+		return x + " " + y + "\n" + elevation;
+	}
+
+	/**
+	 * Changes the Acre Elevation
+	 * @param temp Elevation to be Set in range (-100,100)
+	 */
+	public void setElevation(int temp) {
+		if(temp > 100)
+			elevation = 100;
+		else if(temp < -100)
+			elevation = -100;
+		else
+			elevation = temp;
+	}
+
+	/**
+	 * 
+	 * @return X value of location
+	 */
+	public int getX() {
+		// TODO Auto-generated method stub
+		return x;
+	}
+	
+	/**
+	 * 
+	 * @return Y value of location
+	 */
+	public int getY() {
+		// TODO Auto-generated method stub
+		return y;
+	}
+
+	/**
+	 * 
+	 * @return Elevation of Acre
+	 */
+	public int getElevation() {
+		// TODO Auto-generated method stub
+		return elevation;
 	}
 	
 	
