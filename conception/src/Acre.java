@@ -30,7 +30,7 @@ public class Acre {
 	
 	public Acre()
 	{
-		this(-5,50,50,0,0,0,0,0);
+		this(-1,50,50,0,0,0,0,0);
 		myBiome = null;
 	}
 	
@@ -193,6 +193,8 @@ public class Acre {
 	 */
 	public String toString()
 	{
+		if(elevation<0)
+			return " ";
 		return x + " " + y + "\n" + elevation;
 	}
 

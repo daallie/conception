@@ -19,10 +19,9 @@ public class Map {
 	
 	public Map(int area)
 	{
-		area = area*640;
-		area = (int) Math.sqrt(area);
-		grid = new Acre[area][area];
-		size = area;
+		size = (int) (Math.pow(2,area) + 1);
+		System.out.println("Generating " + (size*size) + " Acres");
+		grid = new Acre[size][size];
 		/**
 		 * TODO Custom Map Generation
 		 */
@@ -191,7 +190,7 @@ public class Map {
 		// Random Generator
 		Random generator = new Random();
 		// Set the Corners to the same random height
-		int temp = (int) (generator.nextGaussian() * 50);
+		int temp = (int) (generator.nextGaussian() * 30);
 		grid[0][0].setElevation(temp);
 		grid[0][size-1].setElevation(temp);
 		grid[size-1][0].setElevation(temp);
@@ -223,29 +222,29 @@ public class Map {
 		average += grid[x-length][y-length].getElevation();
 		average = average/4;
 		// Set New Elevation
-		center.setElevation((int) (average + (generator.nextGaussian()) * (50 * spread)));
+		center.setElevation((int) (average + (generator.nextGaussian()) * (30 * spread)));
 		System.out.println("Set Elevation: " + center.getElevation() + " Using: " + average + " Spread: " + spread);
 		
 		// Diamond Step
 		average = (center.getElevation() + average)/4;
 		
 		// Set New Elevation South Point
-		grid[x][y+length].setElevation((int) (average + (generator.nextGaussian()) * (50 * spread)));
+		grid[x][y+length].setElevation((int) (average + (generator.nextGaussian()) * (30 * spread)));
 		System.out.println("Corner " + x + " " + (y+length));
 		System.out.println("Set Elevation: " + grid[x][y+length].getElevation() + " Using: " + average + " Spread: " + spread);
 
 		// Set New Elevation North Point
-		grid[x][y-length].setElevation((int) (average + (generator.nextGaussian()) * (50 * spread)));
+		grid[x][y-length].setElevation((int) (average + (generator.nextGaussian()) * (30 * spread)));
 		System.out.println("Corner " + x + " " + (y-length));
 		System.out.println("Set Elevation: " + grid[x][y-length].getElevation() + " Using: " + average + " Spread: " + spread);
 		
 		// Set New Elevation East Point
-		grid[x+length][y].setElevation((int) (average + (generator.nextGaussian()) * (50 * spread)));
+		grid[x+length][y].setElevation((int) (average + (generator.nextGaussian()) * (30 * spread)));
 		System.out.println("Corner " + (x+length) + " " + (y));
 		System.out.println("Set Elevation: " + grid[x+length][y].getElevation() + " Using: " + average + " Spread: " + spread);
 		
 		// Set New Elevation West Point
-		grid[x-length][y].setElevation((int) (average + (generator.nextGaussian()) * (50 * spread)));
+		grid[x-length][y].setElevation((int) (average + (generator.nextGaussian()) * (30 * spread)));
 		System.out.println("Corner " + (x-length) + " " + (y));
 		System.out.println("Set Elevation: " + grid[x-length][y].getElevation() + " Using: " + average + " Spread: " + spread);
 		
@@ -254,13 +253,13 @@ public class Map {
 		// Recursive Call
 		length = length/2;
 		// Bottom Right
-		generateBiomesHelper(grid[x+length][y+length], length, spread/2, generator);
+		generateBiomesHelper(grid[x+length][y+length], length, spread/3, generator);
 		// Bottom Left
-		generateBiomesHelper(grid[x-length][y+length], length, spread/2, generator);
+		generateBiomesHelper(grid[x-length][y+length], length, spread/3, generator);
 		// Top Right
-		generateBiomesHelper(grid[x+length][y-length], length, spread/2, generator);
+		generateBiomesHelper(grid[x+length][y-length], length, spread/3, generator);
 		// Top Left
-		generateBiomesHelper(grid[x-length][y-length], length, spread/2, generator);
+		generateBiomesHelper(grid[x-length][y-length], length, spread/3, generator);
 	}
 
 	private void resetChecks()
