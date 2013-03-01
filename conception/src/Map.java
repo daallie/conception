@@ -31,7 +31,6 @@ public class Map {
 		y = 0;
 	}
 
-	
 	public void baseMap()
 	{
 		for(int i = 0; i<size; i++)
@@ -43,8 +42,10 @@ public class Map {
 		linkAcres();
 		generateBiomes();
 		generateOceans();
+		generateLakes();
 	}
 	
+
 	/**
 	 * 
 	 * @param x Number of Horizontal Acres
@@ -311,6 +312,10 @@ public class Map {
 		if(ocean.getElevation()>=0)
 		{
 			ocean.alterFertility(0);
+			ocean.getEast().alterFertility(0.5);
+			ocean.getWest().alterFertility(0.5);
+			ocean.getNorth().alterFertility(0.5);
+			ocean.getSouth().alterFertility(0.5);
 			return;
 		}
 		// Already Seen
@@ -325,6 +330,52 @@ public class Map {
 		generateOceansHelper(ocean.getWest());
 	}
 	
+	/**
+	 * Generates Lakes
+	 * Grabs All Land <0 that is Not Ocean
+	 * Also Augments the Fertility of the Surrounding Land
+	 */
+	private void generateLakes()
+	{
+		// Get all Acres <0 and Not Ocean
+		ArrayList<Acre> lakes = new ArrayList<Acre>();
+		for(int i = 0; i<size; i++)
+			for(int j = 0; j<size; j++)
+			{
+				if(!grid[i][j].isOcean() && grid[i][j].getElevation()<0)
+					lakes.add(grid[i][j]);
+			}
+		// Augment all Fertility
+		for(Acre lake: lakes)
+		{
+			generateLakesHelper(lake.getEast(),1.2);
+			generateLakesHelper(lake.getNorth(),1.2);
+			generateLakesHelper(lake.getSouth(),1.2);
+			generateLakesHelper(lake.getWest(),1.2);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param lake Lake Origin
+	 * @param i Amount to Modify Fertility
+	 */
+	private void generateLakesHelper(Acre lake, double i)
+	{
+		// Base Case
+		if(i<=1)
+			return;
+		// Modify Fertility
+		lake.alterFertility(i);
+		// Shift Fertility Change
+		i -= .04;
+		// Recursive Call
+		generateLakesHelper(lake.getEast(),i);
+		generateLakesHelper(lake.getNorth(),i);
+		generateLakesHelper(lake.getSouth(),i);
+		generateLakesHelper(lake.getWest(),i);
+	}
+
 	/**
 	 * Part of the Original Biome Code
 	 * Currently seen as depricated

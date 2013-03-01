@@ -31,7 +31,7 @@ public class Acre {
 	
 	public Acre()
 	{
-		this(-1,50,50,0,0,0,0,0);
+		this(-1,50,20,0,0,0,0,0);
 		myBiome = null;
 	}
 	
@@ -246,6 +246,10 @@ public class Acre {
 	public void alterFertility(double i)
 	{
 		fertility = (int) (fertility*i);
+		if(fertility<0)
+			fertility = 0;
+		else if(fertility>100)
+			fertility = 100;
 	}
 	
 	/**
@@ -256,7 +260,6 @@ public class Acre {
 	{
 		return fertility;
 	}
-
 	
 	/**
 	 * 
