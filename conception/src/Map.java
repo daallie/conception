@@ -348,15 +348,12 @@ public class Map {
 		// Augment all Fertility
 		for(Acre lake: lakes)
 		{
-			generateLakesHelper(lake.getEast(),1.2);
-			generateLakesHelper(lake.getNorth(),1.2);
-			generateLakesHelper(lake.getSouth(),1.2);
-			generateLakesHelper(lake.getWest(),1.2);
+			generateLakesHelper(lake,1.1);
 		}
 	}
 	
 	/**
-	 * 
+	 * Recursive Method to improve the fertility of land surrounding fresh water
 	 * @param lake Lake Origin
 	 * @param i Amount to Modify Fertility
 	 */
@@ -368,7 +365,7 @@ public class Map {
 		// Modify Fertility
 		lake.alterFertility(i);
 		// Shift Fertility Change
-		i -= .04;
+		i *= .985;
 		// Recursive Call
 		generateLakesHelper(lake.getEast(),i);
 		generateLakesHelper(lake.getNorth(),i);

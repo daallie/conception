@@ -31,7 +31,7 @@ public class Acre {
 	
 	public Acre()
 	{
-		this(-1,50,20,0,0,0,0,0);
+		this(-1,50,30,0,0,0,0,0);
 		myBiome = null;
 	}
 	
