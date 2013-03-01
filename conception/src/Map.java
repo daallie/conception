@@ -2,6 +2,7 @@
  * Write Map Generation Code
  */
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Map {
@@ -41,6 +42,7 @@ public class Map {
 			}
 		linkAcres();
 		generateBiomes();
+		generateOceans();
 	}
 	
 	/**
@@ -185,6 +187,10 @@ public class Map {
 		}
 	}
 
+	/**
+	 * Generates Biomes Using Midpoint Displacement Diamond-Square Algorithm
+	 * Processes Initial Corners and then calls helper method
+	 */
 	private void generateBiomes()
 	{
 		// Random Generator
@@ -201,6 +207,14 @@ public class Map {
 		System.out.println(acresTouched);
 	}
 	
+	/**
+	 * Biome Generation Helper Method
+	 * Initiates Diamond Then Prepares New Corners before recursively calling on new quadrants
+	 * @param center Center point of current square
+	 * @param length 1/2 the Length of the Current Square
+	 * @param spread Variable difference possible from the average
+	 * @param generator Java Random Object (Is reused to conserve memory
+	 */
 	private void generateBiomesHelper(Acre center, int length, double spread, Random generator)
 	{
 		// Base Case
@@ -222,7 +236,7 @@ public class Map {
 		average += grid[x-length][y-length].getElevation();
 		average = average/4;
 		// Set New Elevation
-		center.setElevation((int) (average + (generator.nextGaussian()) * (30 * spread)));
+		center.setElevation((int) (average + (generator.nextGaussian()) * (50 * spread)));
 		System.out.println("Set Elevation: " + center.getElevation() + " Using: " + average + " Spread: " + spread);
 		
 		// Diamond Step
@@ -253,15 +267,68 @@ public class Map {
 		// Recursive Call
 		length = length/2;
 		// Bottom Right
-		generateBiomesHelper(grid[x+length][y+length], length, spread/3, generator);
+		generateBiomesHelper(grid[x+length][y+length], length, spread/2.5, generator);
 		// Bottom Left
-		generateBiomesHelper(grid[x-length][y+length], length, spread/3, generator);
+		generateBiomesHelper(grid[x-length][y+length], length, spread/2.5, generator);
 		// Top Right
-		generateBiomesHelper(grid[x+length][y-length], length, spread/3, generator);
+		generateBiomesHelper(grid[x+length][y-length], length, spread/2.5, generator);
 		// Top Left
-		generateBiomesHelper(grid[x-length][y-length], length, spread/3, generator);
+		generateBiomesHelper(grid[x-length][y-length], length, spread/2.5, generator);
 	}
 
+	/**
+	 * Generates Oceans
+	 * Essentially Determines what qualifies as salt water.
+	 * Current default permiates all from all <0 elevation acres 
+	 * 	connected directly to an acre <-10 elevation
+	 */
+	private void generateOceans()
+	{
+		// Find all Acres with Elevation <-10
+		ArrayList<Acre> deepWater = new ArrayList<Acre>();
+		for(int i = 0; i<size; i++)
+			for(int j = 0; j<size; j++)
+			{
+				if(grid[i][j].getElevation()<-10)
+					deepWater.add(grid[i][j]);
+			}
+		
+		// Parse All Connected Acres
+		for(Acre ocean : deepWater)
+		{
+			generateOceansHelper(ocean);
+		}
+	}
+	
+	/**
+	 * Recursively Parses through all attached Acres and sets as Ocean
+	 * Also Depletes the first land Acre Fertility to 0
+	 * @param ocean Acre to Start
+	 */
+	private void generateOceansHelper(Acre ocean)
+	{
+		// Base Case
+		if(ocean.getElevation()>=0)
+		{
+			ocean.alterFertility(0);
+			return;
+		}
+		// Already Seen
+		if(ocean.isOcean())
+			return;
+		// Set as Ocean
+		ocean.setOcean(true);
+		// Call Recursively
+		generateOceansHelper(ocean.getEast());
+		generateOceansHelper(ocean.getNorth());
+		generateOceansHelper(ocean.getSouth());
+		generateOceansHelper(ocean.getWest());
+	}
+	
+	/**
+	 * Part of the Original Biome Code
+	 * Currently seen as depricated
+	 */
 	private void resetChecks()
 	{
 		System.out.println("Resetting Checks");

@@ -10,6 +10,7 @@ public class Acre {
 	private Biome myBiome;
 	private boolean inBiome = false;
 	private boolean checked = false;
+	private boolean isOcean = false;
 	private int elevation;
 	private int humidity;
 	private int fertility;
@@ -178,13 +179,10 @@ public class Acre {
 		return true;
 	}
 	
-	
 	public String location()
 	{
 		return x + " " + y;
 	}
-	
-	
 	
 	/**
 	 * Return Location in format
@@ -193,9 +191,11 @@ public class Acre {
 	 */
 	public String toString()
 	{
+		if(isOcean)
+			return "s";
 		if(elevation<0)
 			return " ";
-		return x + " " + y + "\n" + elevation;
+		return x + " " + y + "\n" + elevation + " " + fertility;
 	}
 
 	/**
@@ -238,5 +238,41 @@ public class Acre {
 		return elevation;
 	}
 	
+	/**
+	 * 
+	 * @param i New Fertility Value
+	 * @return
+	 */
+	public void alterFertility(double i)
+	{
+		fertility = (int) (fertility*i);
+	}
 	
+	/**
+	 * 
+	 * @return Current Fertility Value
+	 */
+	public int getFertility()
+	{
+		return fertility;
+	}
+
+	
+	/**
+	 * 
+	 * @return If Acre is Ocean
+	 */
+	public boolean isOcean()
+	{
+		// TODO Auto-generated method stub
+		return isOcean;
+	}
+	
+	/**
+	 * Sets if Acre is Ocean
+	 */
+	public void setOcean(boolean b)
+	{
+		isOcean = b;
+	}
 }
