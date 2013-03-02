@@ -2,10 +2,12 @@
  * Write Map Generation Code
  */
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Map {
+public class Map implements Serializable 
+{
 
 	private Acre[][] grid;
 	private int size;
