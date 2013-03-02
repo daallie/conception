@@ -48,7 +48,6 @@ public class Map {
 		generateMountains();
 	}
 	
-
 	/**
 	 * 
 	 * @param x Number of Horizontal Acres
