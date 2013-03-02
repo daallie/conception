@@ -314,26 +314,34 @@ public class Map implements Serializable
 	 */
 	private void generateOceansHelper(Acre ocean)
 	{
-		// Base Case
-		if(ocean.getElevation()>=0)
+		try
 		{
-			ocean.alterFertility(0);
-			ocean.getEast().alterFertility(0.5);
-			ocean.getWest().alterFertility(0.5);
-			ocean.getNorth().alterFertility(0.5);
-			ocean.getSouth().alterFertility(0.5);
+			// Base Case
+			if(ocean.getElevation()>=0)
+			{
+				ocean.alterFertility(0);
+				ocean.getEast().alterFertility(0.5);
+				ocean.getWest().alterFertility(0.5);
+				ocean.getNorth().alterFertility(0.5);
+				ocean.getSouth().alterFertility(0.5);
+				return;
+			}
+			// Already Seen
+			if(ocean.isOcean())
+				return;
+			// Set as Ocean
+			ocean.setOcean(true);
+			// Call Recursively
+			generateOceansHelper(ocean.getEast());
+			generateOceansHelper(ocean.getNorth());
+			generateOceansHelper(ocean.getSouth());
+			generateOceansHelper(ocean.getWest());
+		}
+		catch(StackOverflowError e)
+		{
+			System.out.println("All Ocean");
 			return;
 		}
-		// Already Seen
-		if(ocean.isOcean())
-			return;
-		// Set as Ocean
-		ocean.setOcean(true);
-		// Call Recursively
-		generateOceansHelper(ocean.getEast());
-		generateOceansHelper(ocean.getNorth());
-		generateOceansHelper(ocean.getSouth());
-		generateOceansHelper(ocean.getWest());
 	}
 	
 	/**
