@@ -28,11 +28,10 @@ public class Acre {
 	private Acre west;
 	private Structure structure;
 	private ArrayList<Unit> units;
-		
 	
 	public Acre()
 	{
-		this(-1,50,30,0,0,0,0,0,50);
+		this(-1,30,30,0,0,0,0,0,50);
 		myBiome = null;
 	}
 	
@@ -197,7 +196,9 @@ public class Acre {
 			return "s";
 		if(elevation<0)
 			return " ";
-		return x + " " + y + "\n" + elevation + " " + fertility;
+		if(structure!=null)
+			return x + " " + y + "\n" + structure.toString();
+		return x + " " + y + "\n" + elevation + " " + humidity;
 	}
 
 	/**
@@ -301,5 +302,80 @@ public class Acre {
 			temperature = 100;
 		else if(temperature<0)
 			temperature = 0;
+	}
+	
+	/**
+	 * 
+	 * @param d Amount to Modify Humidity
+	 */
+	public void alterHumidity(double d)
+	{
+		humidity *= d;
+		if(humidity > 100)
+			humidity = 100;
+		else if(humidity < 0)
+			humidity = 0;
+	}
+
+	/**
+	 * 
+	 * return Acre Base Humidity
+	 */
+	public int getHumidity()
+	{
+		return humidity;
+	}
+
+	
+	public String[] getMenu()
+	{
+		// TODO Auto-generated method stub
+		if(isOcean)
+			return new String[]{"I am Ocean","(" + x + ", " + y + ")"};
+		if(elevation<0)
+			return new String[]{"I am Lake","(" + x + ", " + y + ")"};
+		if(neighborIsFarm())
+			return new String[]{"Build Farm", "Build Field", "(" + x + ", " + y + ")"};
+		return new String[]{"Build Farm", "(" + x + ", " + y + ")"};
+	}
+
+	private boolean neighborIsFarm()
+	{
+		if(north.hasFarm())
+			return true;
+		if(south.hasFarm())
+			return true;
+		if(east.hasFarm())
+			return true;
+		if(west.hasFarm())
+			return true;
+		return false;
+	}
+
+	
+	public Farm getFarm()
+	{
+		if(neighborIsFarm())
+		{
+			Acre farm = null;
+			if(north.hasFarm())
+				farm = north;
+			else if(south.hasFarm())
+				farm = south;
+			else if(east.hasFarm())
+				farm = east;
+			else
+				farm = west;
+			if(farm.structure.getName().equals("Farm"))
+				return (Farm) farm.structure;
+			else
+				return ((FarmField) farm.structure).getFarm();
+		}
+		return null;
+	}
+
+	private boolean hasFarm()
+	{
+		return structure!=null && (structure.getName().equals("Farm") || structure.getName().equals("Field"));
 	}
 }

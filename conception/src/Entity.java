@@ -4,11 +4,13 @@ import java.awt.event.ActionListener;
 
 public abstract class Entity implements ActionListener{
 	private int HP;
-	private static final int maxHP = 100;
-	private Point coordinates;
+	private static int maxHP = 100;
+	private int x;
+	private int y;
 	private double durability;
 	private static final double maxDurability = 0.0;
 	private static final double minDurability = 1.0;
+	private String name;
 	
 	/**
 	 * Default Constructor
@@ -17,7 +19,8 @@ public abstract class Entity implements ActionListener{
 	public Entity()
 	{
 		HP = 1;
-		coordinates = new Point(0,0);
+		x = 0;
+		y = 0;
 		durability = 1;
 	}
 	
@@ -51,6 +54,15 @@ public abstract class Entity implements ActionListener{
 		setLocation(x,y);
 	}
 
+	public Entity(int h, int maxH, int x, int y, double d)
+	{
+		HP = h;
+		maxHP = maxH;
+		this.x = x;
+		this.y = y;
+		durability = d;
+	}
+	
 	/**
 	 * 
 	 * @param i Amount to Change HP
@@ -84,7 +96,8 @@ public abstract class Entity implements ActionListener{
 	 */
 	public void setLocation(Point p)
 	{
-		coordinates = p;
+		x = (int) p.getX();
+		y = (int) p.getY();
 	}
 	
 	/**
@@ -101,7 +114,7 @@ public abstract class Entity implements ActionListener{
 	 */
 	public Point getLocation()
 	{
-		return coordinates;
+		return new Point(x,y);
 	}
 
 	/**
@@ -152,4 +165,19 @@ public abstract class Entity implements ActionListener{
 	
 	public abstract void noHP();
 	public abstract void noDurability();
+	
+	public String toString()
+	{
+		return name;
+	}
+
+	public void setName(String n)
+	{
+		name = n;
+	}
+	
+	public String getName()
+	{
+		return name;
+	}
 }

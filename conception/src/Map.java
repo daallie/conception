@@ -8,13 +8,14 @@ import java.util.Random;
 
 public class Map implements Serializable 
 {
-
 	private Acre[][] grid;
 	private int size;
 	private int power;
 	private int x;
 	private int y;
 	private int acresTouched = 0;
+	private int focusX;
+	private int focusY;
 	
 	public Map()
 	{
@@ -320,10 +321,15 @@ public class Map implements Serializable
 			if(ocean.getElevation()>=0)
 			{
 				ocean.alterFertility(0);
+				ocean.alterHumidity(1.5);
 				ocean.getEast().alterFertility(0.5);
+				ocean.getEast().alterHumidity(1.25);
 				ocean.getWest().alterFertility(0.5);
+				ocean.getWest().alterHumidity(1.25);
 				ocean.getNorth().alterFertility(0.5);
+				ocean.getNorth().alterHumidity(1.25);
 				ocean.getSouth().alterFertility(0.5);
+				ocean.getSouth().alterHumidity(1.25);
 				return;
 			}
 			// Already Seen
@@ -378,6 +384,7 @@ public class Map implements Serializable
 			return;
 		// Modify Fertility
 		lake.alterFertility(i);
+		lake.alterHumidity(1+(i-1)/2);
 		// Shift Fertility Change
 		i *= .985;
 		// Recursive Call
@@ -424,7 +431,8 @@ public class Map implements Serializable
 			for(Acre mountain: mountains)
 			{
 				mountain.alterFertility(Math.pow(0.95,(mountain.getElevation()-10)));
-				mountain.alterTemperature(Math.pow(0.96,(mountain.getElevation()-10)));
+				mountain.alterTemperature(Math.pow(0.95,(mountain.getElevation()-10)));
+				mountain.alterHumidity(Math.pow(0.9,(mountain.getElevation()-10)));
 			}
 		}
 	}
@@ -442,6 +450,41 @@ public class Map implements Serializable
 			{
 				grid[i][j].resetCheck();
 			}
+		}
+	}
+
+	
+	/**
+	 * 
+	 * @param x X Coord
+	 * @param y Y Coord
+	 */
+	public String[] rightClick(int x, int y)
+	{
+		int tempX = this.x+x;
+		int tempY = this.y+y;
+		if(tempX<0)
+			tempX = size+tempX;
+		else if(tempX>=size)
+			tempX = tempX-size;
+		if(tempY<0)
+			tempY = size+tempY;
+		else if(tempY>=size)
+			tempY = tempY-size;
+		focusX = tempX;
+		focusY = tempY;
+		return grid[tempX][tempY].getMenu();
+	}
+
+	public void option(int i)
+	{
+		// TODO Auto-generated method stub
+		switch(i)
+		{
+		case 0:
+			grid[focusX][focusY].setStructure(new Farm());
+		case 1:
+			grid[focusX][focusY].setStructure(new FarmField(grid[focusX][focusY].getFarm()));
 		}
 	}
 }

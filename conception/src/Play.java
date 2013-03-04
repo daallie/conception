@@ -2,6 +2,7 @@
 
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -17,8 +18,15 @@ public class Play extends BasicGameState
 	private int width;
 	private int height;
 	private Map currentMap;
+	private boolean rightClick = false;
+	private boolean leftClick = false;
+	private int clickX;
+	private int clickY;
+	private int leftX;
+	private int leftY;
+	private int grid = 50;
 	
-	public Play(int state)
+ 	public Play(int state)
 	{
 		ID = state;
 	}
@@ -31,12 +39,13 @@ public class Play extends BasicGameState
 		/**
 		 * TODO write Map Making
 		 */
-		currentMap = new Map(8);
 	}
 	
 	// This method renders images, strings, shapes, etc.
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException
 	{
+		if(!rightClick)
+			g.clear();
 		// Top Window
 		g.drawRect(0, 0, width, 30);
 		// Main Window
@@ -47,6 +56,37 @@ public class Play extends BasicGameState
 		g.drawRect(0, height - 200, width-200, 200);
 		// Display Map
 		displayMap(g);
+		// Display Right Click Menu
+		if(rightClick)
+		{
+			int tempX = clickX;
+			int tempY = clickY-30;
+			tempX = clickX/grid - (width-200)/grid/2;
+			tempY = (clickY-30)/grid - (height-230)/grid/2;
+			String[] options = currentMap.rightClick(tempX, tempY);
+			g.fillRect(clickX, clickY, 100, options.length*25 );
+			g.setColor(Color.black);
+			for(int i = 0; i<options.length; i++)
+			{
+				g.drawString(options[i], clickX+5, clickY+5+25*i);
+			}
+			g.setColor(Color.white);
+			/**
+			 * TODO Write Get rightClick in Map (to get Menu Options)
+			 */
+		}
+		else if(leftClick)
+		{
+			// In Menu
+			if(leftX > clickX &&  leftX < clickX+100)
+				// Option 1
+				if(leftY > clickY)
+				{
+					currentMap.option((leftY-clickY-5)/25);
+				}
+			leftClick = false;
+		}
+			
 	}
 	
 	// This method updates the screen. It is how the animation works within the game.
@@ -65,6 +105,19 @@ public class Play extends BasicGameState
 			currentMap.move(3);
 		if(input.isKeyPressed(input.KEY_F1))
 			currentMap = new Map(6);
+		if(input.isMousePressed(input.MOUSE_RIGHT_BUTTON))
+		{
+			clickX = input.getMouseX();
+			clickY = input.getMouseY();
+			rightClick = true;
+		}
+		else if(input.isMousePressed(input.MOUSE_LEFT_BUTTON))
+		{
+			leftX = input.getMouseX();
+			leftY = input.getMouseY();
+			rightClick = false;
+			leftClick = true;
+		}
 	}
 	
 	public int getID()
@@ -74,19 +127,20 @@ public class Play extends BasicGameState
 
 	private void displayMap(Graphics g)
 	{
+		if(currentMap == null)
+			return;
 		// Temporary Minimum Grid Size
-		int GRID = 50;
 		int wide = width - 200;
 		int high = height - 230;
-		wide = wide/GRID;
-		high = high/GRID;
+		wide = wide/grid;
+		high = high/grid;
 		Acre[][] display = currentMap.getDisplayMap(wide, high);
 		for(int i = 0; i<wide; i++)
 		{
 			for(int j = 0; j<high; j++)
 			{
-				g.drawRect(i*GRID, 30+j*GRID, GRID, GRID);
-				g.drawString(display[i][j].toString(), i*GRID+5, 30+j*GRID);
+				g.drawRect(i*grid, 30+j*grid, grid, grid);
+				g.drawString(display[i][j].toString(), i*grid+5, 30+j*grid);
 			}
 		}
 	}
