@@ -2,13 +2,6 @@ import java.util.ArrayList;
 
 
 public class Acre {
-	/**
-	 * TODO Fix Null Biome Pointer
-	 * Remove the biomeID variable here
-	 */
-	public int biomeID;
-	private Biome myBiome;
-	private boolean inBiome = false;
 	private boolean checked = false;
 	private boolean isOcean = false;
 	private int elevation;
@@ -32,7 +25,6 @@ public class Acre {
 	public Acre()
 	{
 		this(-1,30,30,0,0,0,0,0,50);
-		myBiome = null;
 	}
 	
 	/**
@@ -68,27 +60,6 @@ public class Acre {
 		checked = false;
 	}
 	
-	public boolean inBiome()
-	{
-		return myBiome!=null;
-	}
-
-	public Biome getBiome()
-	{
-		return myBiome;
-	}
-	
-	public boolean biomeClaim(Biome a)
-	{
-		checked = true;
-		if(inBiome)
-			return false;
-		biomeID = a.getID();
-		myBiome = a;
-		inBiome = true;
-		return true;
-	}
-
 	/**
 	 * @param n Acre in the North Position
 	 * @param s Acre in the South Position
@@ -212,6 +183,7 @@ public class Acre {
 			elevation = -100;
 		else
 			elevation = temp;
+		checked = true;
 	}
 
 	/**
@@ -377,5 +349,31 @@ public class Acre {
 	private boolean hasFarm()
 	{
 		return structure!=null && (structure.getName().equals("Farm") || structure.getName().equals("Field"));
+	}
+
+	
+	public String getDetails()
+	{
+		// TODO Auto-generated method stub
+		String rString = "Location: (" + x + ", " + y + ")";
+		rString += "\n";
+		rString += "Elevation: " + elevation;
+		rString += "\n";
+		rString += "Temperature: " + temperature;
+		rString += "\n";
+		rString += "Humidity: " + humidity;
+		rString += "\n";
+		rString += "Fertility: " + fertility;
+		rString += "\n";
+		rString += "Ore: " + oreType;
+		rString += "\n";
+		rString += "Quantity: " + oreQuantity;
+		rString += "\n";
+		rString += "Depth: " + oreDepth;
+		rString += "\n";
+		rString += "Lumber: " + lumberType;
+		rString += "\n";
+		rString += "Quantity: " + lumberQuantity;
+		return rString;
 	}
 }

@@ -25,6 +25,7 @@ public class Play extends BasicGameState
 	private int leftX;
 	private int leftY;
 	private int grid = 50;
+	private String details = "";
 	
  	public Play(int state)
 	{
@@ -44,8 +45,7 @@ public class Play extends BasicGameState
 	// This method renders images, strings, shapes, etc.
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException
 	{
-		if(!rightClick)
-			g.clear();
+		g.clear();
 		// Top Window
 		g.drawRect(0, 0, width, 30);
 		// Main Window
@@ -54,37 +54,66 @@ public class Play extends BasicGameState
 		g.drawRect(width-200, 30, 200, height-30);
 		// Bottom Window
 		g.drawRect(0, height - 200, width-200, 200);
+		
+		// Cut Off if no Map Generated
+		if(currentMap == null)
+			return;
+		
+		// Display Acre Information
+		g.drawString(details, 5, height - 195);
 		// Display Map
 		displayMap(g);
 		// Display Right Click Menu
 		if(rightClick)
 		{
-			int tempX = clickX;
-			int tempY = clickY-30;
-			tempX = clickX/grid - (width-200)/grid/2;
-			tempY = (clickY-30)/grid - (height-230)/grid/2;
-			String[] options = currentMap.rightClick(tempX, tempY);
-			g.fillRect(clickX, clickY, 100, options.length*25 );
-			g.setColor(Color.black);
-			for(int i = 0; i<options.length; i++)
+			if(leftClick)
 			{
-				g.drawString(options[i], clickX+5, clickY+5+25*i);
+				// In Menu
+				if(leftX > clickX &&  leftX < clickX+100)
+					// Option 1
+					if(leftY > clickY)
+					{
+						currentMap.option((leftY-clickY-5)/25);
+					}
+				leftClick = false;
+				rightClick = false;
 			}
-			g.setColor(Color.white);
-			/**
-			 * TODO Write Get rightClick in Map (to get Menu Options)
-			 */
+			else
+			{
+				int tempX = clickX;
+				int tempY = clickY-30;
+				tempX = clickX/grid - (width-200)/grid/2;
+				tempY = (clickY-30)/grid - (height-230)/grid/2;
+				String[] options = currentMap.rightClick(tempX, tempY);
+				g.fillRect(clickX, clickY, 100, options.length*25 );
+				g.setColor(Color.black);
+				for(int i = 0; i<options.length; i++)
+				{
+					g.drawString(options[i], clickX+5, clickY+5+25*i);
+				}
+				g.setColor(Color.white);
+				/**
+				 * TODO Write Get rightClick in Map (to get Menu Options)
+				 */
+			}
 		}
+		/**
+		 * TODO Select Menu
+		 */
 		else if(leftClick)
 		{
-			// In Menu
-			if(leftX > clickX &&  leftX < clickX+100)
-				// Option 1
-				if(leftY > clickY)
-				{
-					currentMap.option((leftY-clickY-5)/25);
-				}
+			/**
+			 * TODO
+			 * Known Bug Can Select the Outside Edge that is not displayed but still in the map window
+			 */
 			leftClick = false;
+			// If Selection is in the Map
+			if(!(leftX < 0 || leftX > width-200 || leftY < 30 || leftY > height-200))
+			{
+				int tempX = leftX/grid - (width-200)/grid/2;
+				int tempY = (leftY-30)/grid - (height-230)/grid/2;
+				details = currentMap.getAcreDetails(tempX, tempY);
+			}
 		}
 			
 	}
@@ -95,6 +124,9 @@ public class Play extends BasicGameState
 		Input input = gc.getInput();
 		width = gc.getWidth();
 		height = gc.getHeight();
+		/*
+		 * Map movement using Arrow Keys
+		 */
 		if(input.isKeyPressed(input.KEY_UP))
 			currentMap.move(0);
 		if(input.isKeyPressed(input.KEY_DOWN))
@@ -103,19 +135,35 @@ public class Play extends BasicGameState
 			currentMap.move(2);
 		if(input.isKeyPressed(input.KEY_RIGHT))
 			currentMap.move(3);
+		
+		/*
+		 * Map Generation using F1
+		 */
 		if(input.isKeyPressed(input.KEY_F1))
-			currentMap = new Map(6);
+			currentMap = new Map(7);
+		
+		/*
+		 * ESC Menu
+		 */
+		if(input.isKeyPressed(input.KEY_ESCAPE))
+		{
+			System.out.println("Escape Menu");
+		}
+		
+		/*
+		 * Mouse Interaction
+		 */
 		if(input.isMousePressed(input.MOUSE_RIGHT_BUTTON))
 		{
 			clickX = input.getMouseX();
 			clickY = input.getMouseY();
 			rightClick = true;
+			leftClick = false;
 		}
 		else if(input.isMousePressed(input.MOUSE_LEFT_BUTTON))
 		{
 			leftX = input.getMouseX();
 			leftY = input.getMouseY();
-			rightClick = false;
 			leftClick = true;
 		}
 	}

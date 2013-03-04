@@ -49,7 +49,6 @@ public class Game extends StateBasedGame
 			appgc = new AppGameContainer(new Game(NAME));
 			// This set the Size of the screen (x, y, fullscreen)
 			appgc.setDisplayMode(1024, 768, false);
-			
 			// Starts the Game
 			appgc.start();
 			

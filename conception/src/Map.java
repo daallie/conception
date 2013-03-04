@@ -13,7 +13,6 @@ public class Map implements Serializable
 	private int power;
 	private int x;
 	private int y;
-	private int acresTouched = 0;
 	private int focusX;
 	private int focusY;
 	
@@ -207,10 +206,7 @@ public class Map implements Serializable
 		grid[0][size-1].setElevation(temp);
 		grid[size-1][0].setElevation(temp);
 		grid[size-1][size-1].setElevation(temp);
-		acresTouched +=4;
 		generateBiomesHelper(grid[(size-1)/2][(size-1)/2], (size-1)/2, 1, generator);
-		System.out.println(size*size);
-		System.out.println(acresTouched);
 	}
 	
 	/**
@@ -231,7 +227,6 @@ public class Map implements Serializable
 		// Get Corner Values
 		int x = center.getX();
 		int y = center.getY();
-		System.out.println("Centered " + x + " " + y);
 		// Bottom Right Corner
 		int average = grid[x+length][y+length].getElevation();
 		// Bottom Left Corner
@@ -243,37 +238,37 @@ public class Map implements Serializable
 		average = average/4;
 		// Set New Elevation
 		center.setElevation((int) (average + (generator.nextGaussian()) * (50 * spread)));
-		System.out.println("Set Elevation: " + center.getElevation() + " Using: " + average + " Spread: " + spread);
 		
 		// Diamond Step
 		average = (center.getElevation() + average)/4;
 		
 		// Set New Elevation South Point
-		grid[x][y+length].setElevation((int) (average + (generator.nextGaussian()) * (30 * spread)));
-		System.out.println("Corner " + x + " " + (y+length));
-		System.out.println("Set Elevation: " + grid[x][y+length].getElevation() + " Using: " + average + " Spread: " + spread);
+		if(!grid[x][y+length].isChecked())
+		{
+			grid[x][y+length].setElevation((int) (average + (generator.nextGaussian()) * (30 * spread)));
+		}
 
 		// Set New Elevation North Point
-		grid[x][y-length].setElevation((int) (average + (generator.nextGaussian()) * (30 * spread)));
-		System.out.println("Corner " + x + " " + (y-length));
-		System.out.println("Set Elevation: " + grid[x][y-length].getElevation() + " Using: " + average + " Spread: " + spread);
+		if(!grid[x][y-length].isChecked())
+		{
+			grid[x][y-length].setElevation((int) (average + (generator.nextGaussian()) * (30 * spread)));
+		}
 		
 		// Set New Elevation East Point
-		grid[x+length][y].setElevation((int) (average + (generator.nextGaussian()) * (30 * spread)));
-		System.out.println("Corner " + (x+length) + " " + (y));
-		System.out.println("Set Elevation: " + grid[x+length][y].getElevation() + " Using: " + average + " Spread: " + spread);
+		if(!grid[x+length][y].isChecked())
+		{
+			grid[x+length][y].setElevation((int) (average + (generator.nextGaussian()) * (30 * spread)));
+		}
 		
 		// Set New Elevation West Point
-		grid[x-length][y].setElevation((int) (average + (generator.nextGaussian()) * (30 * spread)));
-		System.out.println("Corner " + (x-length) + " " + (y));
-		System.out.println("Set Elevation: " + grid[x-length][y].getElevation() + " Using: " + average + " Spread: " + spread);
-		
-		acresTouched += 5;
+		if(!grid[x-length][y].isChecked())
+		{
+			grid[x-length][y].setElevation((int) (average + (generator.nextGaussian()) * (30 * spread)));
+		}
 		
 		// Recursive Call
 		length = length/2;
 		double newSpread = spread/(1 + 1/(power/5.0));
-		System.out.println("New Spread " + newSpread);
 		// Bottom Right
 		generateBiomesHelper(grid[x+length][y+length], length, newSpread, generator);
 		// Bottom Left
@@ -438,23 +433,6 @@ public class Map implements Serializable
 	}
 	
 	/**
-	 * Part of the Original Biome Code
-	 * Currently seen as depricated
-	 */
-	private void resetChecks()
-	{
-		System.out.println("Resetting Checks");
-		for(int i = 0; i< size; i++)
-		{
-			for(int j = 0; j< size; j++)
-			{
-				grid[i][j].resetCheck();
-			}
-		}
-	}
-
-	
-	/**
 	 * 
 	 * @param x X Coord
 	 * @param y Y Coord
@@ -486,5 +464,20 @@ public class Map implements Serializable
 		case 1:
 			grid[focusX][focusY].setStructure(new FarmField(grid[focusX][focusY].getFarm()));
 		}
+	}
+	
+	public String getAcreDetails(int x, int y)
+	{
+		int tempX = this.x+x;
+		int tempY = this.y+y;
+		if(tempX<0)
+			tempX = size+tempX;
+		else if(tempX>=size)
+			tempX = tempX-size;
+		if(tempY<0)
+			tempY = size+tempY;
+		else if(tempY>=size)
+			tempY = tempY-size;
+		return grid[tempX][tempY].getDetails();
 	}
 }
