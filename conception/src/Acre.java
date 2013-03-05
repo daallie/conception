@@ -1,9 +1,10 @@
+import java.awt.Point;
 import java.util.ArrayList;
-
 
 public class Acre {
 	private boolean checked = false;
 	private boolean isOcean = false;
+	private boolean hasFarm = false;
 	private int elevation;
 	private int temperature;
 	private int humidity;
@@ -122,7 +123,7 @@ public class Acre {
 	public void addUnit(Unit a)
 	{
 		units.add(a);
-		a.setLocation(x,y);
+		a.setLocation(this);
 	}
 	
 	/**
@@ -148,9 +149,13 @@ public class Acre {
 		if(this.structure != null)
 			return false;
 		this.structure = structure;
+		structure.setLocation(this);
 		return true;
 	}
 	
+	/**
+	 * @return Location in Format 'x y'
+	 */
 	public String location()
 	{
 		return x + " " + y;
@@ -298,7 +303,10 @@ public class Acre {
 		return humidity;
 	}
 
-	
+	/**
+	 * TODO
+	 * @return Array of Menu Options that can be performed on this acre
+	 */
 	public String[] getMenu()
 	{
 		// TODO Auto-generated method stub
@@ -311,6 +319,9 @@ public class Acre {
 		return new String[]{"Build Farm", "(" + x + ", " + y + ")"};
 	}
 
+	/**
+	 * @return True if a Neighboring Acre has a Farm or Farm Field
+	 */
 	private boolean neighborIsFarm()
 	{
 		if(north.hasFarm())
@@ -323,8 +334,11 @@ public class Acre {
 			return true;
 		return false;
 	}
-
 	
+	/**
+	 * North -> South -> East -> West Priority
+	 * @return One of the Farms from one of its neighbors
+	 */
 	public Farm getFarm()
 	{
 		if(neighborIsFarm())
@@ -346,11 +360,19 @@ public class Acre {
 		return null;
 	}
 
-	private boolean hasFarm()
+	/**
+	 * 
+	 * @return If Acre has Farm/Field Structure Built on it
+	 */
+	public boolean hasFarm()
 	{
-		return structure!=null && (structure.getName().equals("Farm") || structure.getName().equals("Field"));
+		return hasFarm;
 	}
-
+	
+	public void setFarm(boolean b)
+	{
+		hasFarm = b;
+	}
 	
 	public String getDetails()
 	{
@@ -375,5 +397,11 @@ public class Acre {
 		rString += "\n";
 		rString += "Quantity: " + lumberQuantity;
 		return rString;
+	}
+
+	
+	public double distance(Acre location)
+	{
+		return (new Point(x,y)).distance(location.x, location.y);
 	}
 }

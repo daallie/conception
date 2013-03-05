@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public abstract class Structure extends Entity {
 	private Unit owner;
 	private ArrayList<Unit> workers;
-	
+	private Acre location;
 	
 	/**
 	 * Default Constructor
@@ -22,9 +22,9 @@ public abstract class Structure extends Entity {
 		owner = u;
 	}
 	
-	public Structure(Unit u, int x, int y)
+	public Structure(Unit u, Acre a)
 	{
-		super(1000, 1000, x, y, 1);
+		super(1000, 1000, 1, a);
 		owner = u;
 	}
 	
@@ -39,5 +39,7 @@ public abstract class Structure extends Entity {
 	}
 	
 	public abstract void gameTick();
-	public abstract void gameDay();
+	public abstract void gameDay(int day);
+	public abstract void gameMonth(int month);
+	public abstract void gameYear(int year);
 }

@@ -34,24 +34,41 @@ public class FarmField extends Structure
 		
 	}
 
+	
+
+	public Farm getFarm()
+	{
+		// TODO Auto-generated method stub
+		return myFarm;
+	}
+
+
 	@Override
 	public void gameTick()
 	{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public void gameDay()
+	public void gameDay(int day)
 	{
 		// TODO Auto-generated method stub
 		
 	}
-
 	
-	public Farm getFarm()
+	@Override
+	public void gameMonth(int month)
 	{
 		// TODO Auto-generated method stub
-		return myFarm;
+		
+	}
+	
+
+	@Override
+	public void gameYear(int year)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

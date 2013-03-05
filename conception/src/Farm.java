@@ -13,6 +13,18 @@ public class Farm extends Structure
 		setName("Farm");
 	}
 	
+	
+	/**
+	 * Sets Structure Location to Acre a
+	 * @param a Acre for Farm Location
+	 */
+	@Override
+	public void setLocation(Acre a)
+	{
+		super.setLocation(a);
+		a.setFarm(true);
+	}
+	
 	public void addField(FarmField f)
 	{
 		if(isAttached(f))
@@ -59,9 +71,21 @@ public class Farm extends Structure
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void gameDay(int day)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
-	public void gameDay()
+	public void gameMonth(int month)
+	{
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void gameYear(int year)
 	{
 		// TODO Auto-generated method stub
 		

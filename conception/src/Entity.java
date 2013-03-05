@@ -5,8 +5,7 @@ import java.awt.event.ActionListener;
 public abstract class Entity implements ActionListener{
 	private int HP;
 	private static int maxHP = 100;
-	private int x;
-	private int y;
+	private Acre myAcre;
 	private double durability;
 	private static final double maxDurability = 0.0;
 	private static final double minDurability = 1.0;
@@ -19,8 +18,6 @@ public abstract class Entity implements ActionListener{
 	public Entity()
 	{
 		HP = 1;
-		x = 0;
-		y = 0;
 		durability = 1;
 	}
 	
@@ -32,35 +29,20 @@ public abstract class Entity implements ActionListener{
 		this();
 		HP = a;
 	}
-	
-	/**
-	 * @param a Entity HP
-	 * @param c Entity Coordinate Location
-	 */
-	public Entity(int a, Point c)
-	{
-		this(a);
-		setLocation(c);
-	}
-	
-	/**
-	 * @param a Entity HP
-	 * @param x Entity X Coordinate
-	 * @param y Entity Y Coordinate
-	 */
-	public Entity(int a, int x, int y)
-	{
-		this(a);
-		setLocation(x,y);
-	}
 
-	public Entity(int h, int maxH, int x, int y, double d)
+	public Entity(int h, int maxH, double d)
 	{
 		HP = h;
 		maxHP = maxH;
-		this.x = x;
-		this.y = y;
 		durability = d;
+	}
+
+	public Entity(int h, int maxH, double d, Acre a)
+	{
+		HP = h;
+		maxHP = maxH;
+		durability = d;
+		myAcre = a;
 	}
 	
 	/**
@@ -91,32 +73,16 @@ public abstract class Entity implements ActionListener{
 			noHP();
 	}
 	
-	/**
-	 * @param a Coordinate Location of Current Acre
-	 */
-	public void setLocation(Point p)
+	public void setLocation(Acre a)
 	{
-		x = (int) p.getX();
-		y = (int) p.getY();
+		myAcre = a;
 	}
 	
-	/**
-	 * @param x X Coordinate Location
-	 * @param y Y Coordinate Location
-	 */
-	public void setLocation(int x, int y)
+	public Acre getLocation()
 	{
-		setLocation(new Point(x,y));
+		return myAcre;
 	}
 	
-	/**
-	 * @return Point, specifying current coordinates
-	 */
-	public Point getLocation()
-	{
-		return new Point(x,y);
-	}
-
 	/**
 	 * @return
 	 */
