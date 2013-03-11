@@ -1,4 +1,5 @@
 import java.awt.event.ActionEvent;
+import java.util.Observable;
 
 
 public class FarmField extends Structure
@@ -34,14 +35,11 @@ public class FarmField extends Structure
 		
 	}
 
-	
-
 	public Farm getFarm()
 	{
 		// TODO Auto-generated method stub
 		return myFarm;
 	}
-
 
 	@Override
 	public void gameTick()
@@ -63,12 +61,34 @@ public class FarmField extends Structure
 		// TODO Auto-generated method stub
 		
 	}
-	
 
 	@Override
 	public void gameYear(int year)
 	{
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void update(Observable o, Object arg)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	@Override
+	public double productivity()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public String status()
+	{
+		/**
+		 * TODO Write Status
+		 */
+		return "";
 	}
 }

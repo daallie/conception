@@ -1,8 +1,9 @@
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Observer;
 
 
-public abstract class Structure extends Entity {
+public abstract class Structure extends Entity implements Observer {
 	private Unit owner;
 	private ArrayList<Unit> workers;
 	private Acre location;
@@ -38,6 +39,8 @@ public abstract class Structure extends Entity {
 		return workers;
 	}
 	
+	public abstract String status();
+	public abstract double productivity();
 	public abstract void gameTick();
 	public abstract void gameDay(int day);
 	public abstract void gameMonth(int month);

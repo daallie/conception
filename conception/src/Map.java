@@ -4,10 +4,12 @@
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.Random;
 
-public class Map implements Serializable 
+public class Map implements Serializable, EventListener 
 {
+	private Calendar time;
 	private Acre[][] grid;
 	private int size;
 	private int power;
@@ -18,11 +20,12 @@ public class Map implements Serializable
 	
 	public Map()
 	{
-		this(1);
+		time = new Calendar(this);
 	}
 	
 	public Map(int area)
 	{
+		this();
 		power = area;
 		size = (int) (Math.pow(2,area) + 1);
 		System.out.println("Generating " + (size*size) + " Acres");
@@ -48,6 +51,26 @@ public class Map implements Serializable
 		generateOceans();
 		generateLakes();
 		generateMountains();
+	}
+	
+	public void gameTick()
+	{
+		
+	}
+	
+	public void gameDay()
+	{
+		
+	}
+	
+	public void gameMonth()
+	{
+		
+	}
+	
+	public void gameYear()
+	{
+		
 	}
 	
 	/**
@@ -461,6 +484,8 @@ public class Map implements Serializable
 		{
 		case 0:
 			grid[focusX][focusY].setStructure(new Farm());
+			time.addObserver(grid[focusX][focusY].getStructure());
+			break;
 		case 1:
 			grid[focusX][focusY].setStructure(new FarmField(grid[focusX][focusY].getFarm()));
 		}
@@ -479,5 +504,22 @@ public class Map implements Serializable
 		else if(tempY>=size)
 			tempY = tempY-size;
 		return grid[tempX][tempY].getDetails();
+	}
+
+	public String getStructureDetails(int x, int y)
+	{
+		int tempX = this.x+x;
+		int tempY = this.y+y;
+		if(tempX<0)
+			tempX = size+tempX;
+		else if(tempX>=size)
+			tempX = tempX-size;
+		if(tempY<0)
+			tempY = size+tempY;
+		else if(tempY>=size)
+			tempY = tempY-size;
+		if(grid[tempX][tempY].getStructure() != null)
+			return grid[tempX][tempY].getStructure().status();
+		return "";
 	}
 }

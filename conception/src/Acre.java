@@ -1,7 +1,9 @@
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Acre {
+public class Acre{
 	private boolean checked = false;
 	private boolean isOcean = false;
 	private boolean hasFarm = false;
@@ -150,6 +152,7 @@ public class Acre {
 			return false;
 		this.structure = structure;
 		structure.setLocation(this);
+		
 		return true;
 	}
 	
@@ -398,10 +401,11 @@ public class Acre {
 		rString += "Quantity: " + lumberQuantity;
 		return rString;
 	}
-
 	
 	public double distance(Acre location)
 	{
 		return (new Point(x,y)).distance(location.x, location.y);
 	}
+
+
 }

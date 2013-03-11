@@ -24,8 +24,11 @@ public class Play extends BasicGameState
 	private int clickY;
 	private int leftX;
 	private int leftY;
+	private int focusX;
+	private int focusY;
 	private int grid = 50;
 	private String details = "";
+	private String structure = "";
 	
  	public Play(int state)
 	{
@@ -60,7 +63,12 @@ public class Play extends BasicGameState
 			return;
 		
 		// Display Acre Information
-		g.drawString(details, 5, height - 195);
+		g.drawString(currentMap.getAcreDetails(focusX, focusY), 5, height - 195);
+		// Display Structure Information
+		/**
+		 * TODO Remove Hard Code from X Coord
+		 */
+		g.drawString(currentMap.getStructureDetails(focusX, focusY), 400, height-195);
 		// Display Map
 		displayMap(g);
 		// Display Right Click Menu
@@ -110,9 +118,8 @@ public class Play extends BasicGameState
 			// If Selection is in the Map
 			if(!(leftX < 0 || leftX > width-200 || leftY < 30 || leftY > height-200))
 			{
-				int tempX = leftX/grid - (width-200)/grid/2;
-				int tempY = (leftY-30)/grid - (height-230)/grid/2;
-				details = currentMap.getAcreDetails(tempX, tempY);
+				focusX = leftX/grid - (width-200)/grid/2;
+				focusY = (leftY-30)/grid - (height-230)/grid/2;
 			}
 		}
 			
@@ -121,6 +128,8 @@ public class Play extends BasicGameState
 	// This method updates the screen. It is how the animation works within the game.
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
 	{
+		if(currentMap != null)
+			currentMap.gameTick();
 		Input input = gc.getInput();
 		width = gc.getWidth();
 		height = gc.getHeight();
