@@ -5,22 +5,25 @@ import java.util.TimerTask;
 
 public class Calendar extends Observable
 {
-	Map myMap;
+	private Map myMap;
+	private Timer timer;
 	private int time;
 	private int day;
 	private int month;
 	private int year;
 	private long interval = 6250;
+	private boolean newMonth = false;
+	private boolean newYear = false;
+	
 	
 	private static byte DAY = 24;
 	private static byte MONTH = 24;
 	private static byte YEAR = 12;
 	
-	public static final byte SPRING = 3;
-	public static final byte SUMMER = 6;
-	public static final byte FALL = 9;
-	public static final byte WINTER = 12;
-	
+	public static final byte SPRING = 4;
+	public static final byte SUMMER = 7;
+	public static final byte FALL = 10;
+	public static final byte WINTER = 1;
 	
 	public Calendar(Map map)
 	{
@@ -29,8 +32,8 @@ public class Calendar extends Observable
 		day = 1;
 		month = 1;
 		year = 1;
-		Timer tim = new Timer();
-		tim.scheduleAtFixedRate(new TimeHandle(),0,10);
+		timer = new Timer();
+		timer.scheduleAtFixedRate(new TimeHandle(),0, interval);
 	}
 	
 	private void gameTick()
@@ -55,11 +58,14 @@ public class Calendar extends Observable
 		}
 		notifyObservers();
 		clearChanged();
+		newMonth = false;
+		newYear = false;
 	}
 	
 	private void monthTick()
 	{
 		myMap.gameMonth();
+		newMonth = true;
 		month++;
 		if(month>YEAR)
 		{
@@ -72,6 +78,7 @@ public class Calendar extends Observable
 	{
 		year++;
 		myMap.gameYear();
+		newYear = true;
 	}
 
 	public byte getSeason()
@@ -139,6 +146,15 @@ public class Calendar extends Observable
 		
 	}
 	
+	public boolean newYear()
+	{
+		return newYear;
+	}
+	
+	public boolean newMonth()
+	{
+		return newMonth;
+	}
 }
 
 

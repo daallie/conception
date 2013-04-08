@@ -7,9 +7,13 @@ public abstract class Entity implements ActionListener{
 	private static int maxHP = 100;
 	private Acre myAcre;
 	private double durability;
-	private static final double maxDurability = 0.0;
-	private static final double minDurability = 1.0;
+	private static final double maxDurability = 1.0;
+	private static final double minDurability = 0.0;
 	private String name;
+	
+	/*
+	 * Constructor Methods
+	 */
 	
 	/**
 	 * Default Constructor
@@ -45,6 +49,10 @@ public abstract class Entity implements ActionListener{
 		myAcre = a;
 	}
 	
+	/*
+	 * HP Management Methods
+	 */
+	
 	/**
 	 * 
 	 * @param i Amount to Change HP
@@ -73,6 +81,10 @@ public abstract class Entity implements ActionListener{
 			noHP();
 	}
 	
+	/*
+	 * Location Management Methods
+	 */
+	
 	public void setLocation(Acre a)
 	{
 		myAcre = a;
@@ -82,6 +94,10 @@ public abstract class Entity implements ActionListener{
 	{
 		return myAcre;
 	}
+	
+	/*
+	 * Durability Management Methods
+	 */
 	
 	/**
 	 * @return
@@ -128,15 +144,11 @@ public abstract class Entity implements ActionListener{
 		else if(durability < minDurability)
 			noDurability();
 	}
-	
-	public abstract void noHP();
-	public abstract void noDurability();
-	
-	public String toString()
-	{
-		return name;
-	}
 
+	/*
+	 * Name Management Methods
+	 */
+	
 	public void setName(String n)
 	{
 		name = n;
@@ -146,4 +158,24 @@ public abstract class Entity implements ActionListener{
 	{
 		return name;
 	}
+	
+	/*
+	 * UI Methods
+	 */
+	
+	/**
+	 * Returns Entity Name
+	 */
+	public String toString()
+	{
+		return name;
+	}
+
+	
+	/*
+	 * Abstract Methods
+	 */
+	
+	public abstract void noHP();
+	public abstract void noDurability();
 }

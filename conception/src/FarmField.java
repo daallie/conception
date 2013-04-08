@@ -91,4 +91,12 @@ public class FarmField extends Structure
 		 */
 		return "";
 	}
+
+	
+	@Override
+	public void educate()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

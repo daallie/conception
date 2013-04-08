@@ -85,6 +85,7 @@ public class Farm extends Structure
 		// TODO Auto-generated method stub
 		
 	}
+	
 	@Override
 	public void gameDay(int day)
 	{
@@ -112,7 +113,40 @@ public class Farm extends Structure
 		 * Need to Write Productivity Calculator
 		 * Will Need to be done after Skill System
 		 */
-		return 1.0;
+		double productivity;
+		double multiplier = 1.6;
+		/*
+		 * Start with number of People in Calculation
+		 * One person can manage 1.6 Acres alone at 1.0
+		 * Each additional person can manage 1.6 Acres
+		*/ 
+		if(workers.size() <= 0)
+			return 0.0;
+		else
+		{
+			/**
+			 * TODO 
+			 * Make Variable
+			 */
+			productivity = (workers.size()* multiplier / ( fields.size() + 0.5 ) );
+			// Add Log Functionality for diminishing returns on large number of workers for a farm
+			if(productivity > 1)
+			{
+				productivity = 1 + Math.log(productivity);
+			}
+			
+			/**
+			 * TODO
+			 * incorporate skill system here
+			 */
+			double skillMultiplier = 0;
+			for(Unit u : workers)
+			{
+				// G
+			}
+			skillMultiplier = skillMultiplier/workers.size();
+			return productivity*skillMultiplier;
+		}
 	}
 	
 	private int maxCrop()
@@ -133,9 +167,17 @@ public class Farm extends Structure
 		// Decay Current Inventory
 		cropInventory *= 1-cropType.decayRate(c.getSeason());
 		
+		// Check New Month
+		// Only Attempt to Educate on new Months
+		if(c.newMonth())
+		{
+			educate();
+		}
+		
 		// Must Start Planting Crop
 		if(cropField <= 0)
 		{
+			
 			cropField = 0;
 			cropType.startPlanting();
 			cropField += maxCrop()*cropType.plantRate(c.getSeason()) * productivity();
@@ -166,6 +208,16 @@ public class Farm extends Structure
 	public String status()
 	{
 		return "Crop Type: " + cropType.getName() + "\nCrop in Fields: " + cropField + "\n Grow Status: " + cropType.getStatus() + "\nCrop in Storage: " + cropInventory;
+	}
+
+	
+	@Override
+	public void educate()
+	{
+		for(Unit u : workers)
+		{
+			u.developSkill(u.FARMING);
+		}
 	}
 
 }
