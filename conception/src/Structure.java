@@ -40,13 +40,18 @@ public abstract class Structure extends Entity implements Observer {
 	 * This new Unit will be used in the calculation for productivity/pay/etc
 	 * @param u
 	 */
-	public void addWorker(Unit u)
+	public boolean addWorker(Unit u)
 	{
 		// Prevent Duplicate Workers
 		if(workers.contains(u))
-			return;
+			return false;
 		
-		workers.add(u);
+		return workers.add(u);
+	}
+	
+	public boolean removeWorker(Unit u)
+	{
+		return workers.remove(u);
 	}
 	
 	/**
