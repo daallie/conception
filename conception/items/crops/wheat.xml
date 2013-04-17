@@ -1,0 +1,45 @@
+<crop>
+    <name>Hard Red Winter Wheat</name>
+    <spread>false</spread>
+    <fertility>
+    	<min>20</min> <!-- Worst Condition Possible to survive a number between 0-100 -->
+    	<max>100</max> <!-- Worst Condition Possible to survive a number between 0-100  -->
+    	<optimal>70</optimal> <!-- Optimal is defined as perfect conditions deviations are make exponential impacts from optimal to the extremes a number between 0-100 -->
+    </fertility>
+    <elevation>
+    	<min>0</min>
+    	<max>70</max>
+    	<optimal>10</optimal>
+    </elevation>
+    <humidity>
+    	<min>10</min>
+    	<max>90</max>
+    	<optimal>40</optimal>
+    </humidity>
+    <density> 
+    	<max></max> <!-- Number of Crops per Acre -->
+    	<optimal></optimal>
+    </density>
+    <seasons>
+    	<spring>
+    		<growth>0.015</growth> <!-- Daily growth rate of the crop in specified season -->
+    		<decay>0.005</decay> <!-- Daily decay rate of the crop in specified season -->
+    		<plant>false</plant>
+    	</spring>
+    	<summer>
+    		<growth>0.0</growth>
+    		<decay>0.02</decay>
+    		<plant>false</plant>
+    	</summer>
+    	<fall>
+    		<growth>0.001</growth>
+    		<decay>0.01</decay>
+    		<plant>true</plant>
+    	</fall>
+    	<winter>
+    		<growth>0.0</growth>
+    		<decay>0.0001</decay>
+    		<plant>false</plant>
+    	</winter>
+    </seasons>
+</crop>
