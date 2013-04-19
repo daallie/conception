@@ -2,7 +2,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -27,6 +29,7 @@ public class ItemTable
 		oreList = new ArrayList<Ore>();
 		treeList = new ArrayList<Tree>();
 		totalItems = 0;
+		factory = SAXParserFactory.newInstance();
 	}
 	
 	/*
@@ -43,30 +46,39 @@ public class ItemTable
 	public void load()
 	{
 		File[] crops = fileList("items/crops");
-		File[] ore = fileList("item/ore");
-		File[] trees = fileList("item/trees");
+		File[] ore = fileList("items/ore");
+		File[] trees = fileList("items/trees");
 		
 		totalItems = crops.length + ore.length + trees.length;
 		
 		// Load Crops
 		for(File file : crops)
-			loadFile(file);
+			cropList.add((Crop) loadFile(file, "crop"));
 	}
 	
-	private void loadFile(File f)
+	private Item loadFile(File f, String s)
 	{
-		factory = SAXParserFactory.newInstance();
+		Handler handler = null;
+		
+		switch(s)
+		{
+		case "crop":
+			handler = new CropHandler();
+		}
+		
 		try {
 
 		    InputStream xmlInput  = new FileInputStream(f);
 		    SAXParser saxParser = factory.newSAXParser();
 
-		    DefaultHandler handler   = new SaxHandler();
 		    saxParser.parse(xmlInput, handler);
-
+		    
 		} catch (Throwable err) {
 		    err.printStackTrace ();
 		}
+		
+		currentLocation++;
+		return handler.getItem();
 	}
 	
 	private File[] fileList(String s)
@@ -76,32 +88,119 @@ public class ItemTable
 	}
 }
 
-class SaxHandler extends DefaultHandler {
+abstract class Handler extends DefaultHandler
+{
+	public abstract Item getItem();
+}
 
-    public void startDocument() throws SAXException {
-        System.out.println("start document   : ");
-    }
+class CropHandler extends Handler 
+{
+	Crop c;
+	Stack<String> s;	
+	
+	public CropHandler()
+	{
+		super();
+		c = new Crop();
+		s = new Stack<String>();
+	}
 
-    public void endDocument() throws SAXException {
-        System.out.println("end document     : ");
-    }
-
-    public void startElement(String uri, String localName,
-        String qName, Attributes attributes)
-    throws SAXException {
-
-        System.out.println("start element    : " + qName);
+    public void startElement(String uri, String localName, String qName, Attributes attributes)	throws SAXException 
+    {
+    	s.push(qName);
     }
 
     public void endElement(String uri, String localName, String qName)
     throws SAXException {
-        System.out.println("end element      : " + qName);
+        s.pop();
     }
 
     public void characters(char ch[], int start, int length)
-    throws SAXException {
-        System.out.println("start characters : " +
-            new String(ch, start, length));
+    throws SAXException 
+    {
+    	String value = new String(ch, start, length);
+    	
+    	switch(s.peek())
+    	{
+    	case "name":
+    		c.setName(value);
+    		break;
+    	case "spread":
+    		c.setSpread(Boolean.valueOf(value));
+    		break;
+    	case "min":
+    		String min = s.pop();
+    		set(s.peek(), min, value);
+    		s.push(min);
+    		break;
+    	case "max":
+    		String max = s.pop();
+    		set(s.peek(), max, value);
+    		s.push(max);
+    		break;
+    	case "optimal":
+    		String optimal = s.pop();
+    		set(s.peek(), optimal, value);
+    		s.push(optimal);
+    		break;
+    	}
+    }
+    
+    private void set(String s, String a, String v)
+    {
+    	switch(s)
+    	{
+    	case "fertility":
+    		Byte fertility = Byte.valueOf(v);
+    		if(a.equals("min"))
+    		{
+    			c.setMinFertility(fertility);
+    		}
+    		else if(a.equals("max"))
+    		{
+    			c.setMaxFertility(fertility);
+    		}
+    		else
+    		{
+    			c.setOptimalFertility(fertility);
+    		}
+    		break;
+    	case "elevation":
+    		Byte elevation = Byte.valueOf(v);
+    		if(a.equals("min"))
+    		{
+    			c.setMinElevation(elevation);
+    		}
+    		else if(a.equals("max"))
+    		{
+    			c.setMaxElevation(elevation);
+    		}
+    		else
+    		{
+    			c.setOptimalElevation(elevation);
+    		}
+    		break;
+    	case "humidity":
+    		Byte humidity = Byte.valueOf(v);
+    		if(a.equals("min"))
+    		{
+    			c.setMinHumidity(humidity);
+    		}
+    		else if(a.equals("max"))
+    		{
+    			c.setMaxHumidity(humidity);
+    		}
+    		else
+    		{
+    			c.setOptimalHumidity(humidity);
+    		}
+    		break;
+    	//TODO Add Seasons Cases will need to make changes to Crop
+    	}
     }
 
+    public Item getItem()
+    {
+    	return c;
+    }
 }

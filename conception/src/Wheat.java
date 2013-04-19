@@ -6,7 +6,7 @@ public class Wheat extends Crop
 
 	public Wheat()
 	{
-		super(0, 0, 0, 0, 0, 0, 10000, 0, 0, 0);
+		super();
 		setName("Wheat");
 	}
 	

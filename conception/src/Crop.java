@@ -1,15 +1,19 @@
 import java.awt.event.ActionEvent;
 
 
-public abstract class Crop extends Item
+public class Crop extends Item
 {
 	private String name;
-	private int minFertility;
-	private int maxFertility;
-	private int minElevation;
-	private int maxElevation;
-	private int minHumidity;
-	private int maxHumidity;
+	private byte minFertility;
+	private byte optimalFertility;
+	private byte maxFertility;
+	private byte minElevation;
+	private byte optimalElevation;
+	private byte maxElevation;
+	private byte minHumidity;
+	private byte optimalHumidity;
+	private byte maxHumidity;
+	private boolean spread;
 	
 	// The Base Amount of Crop per Acre
 	// Technology will Eventually Influence this amount
@@ -42,15 +46,15 @@ public abstract class Crop extends Item
 		super();
 	}
 	
-	public Crop(int a, int b, int c, int d, int e, int f, int g, double h, double i, double j)
+	public Crop(byte a, byte b, byte c, byte d, byte e, byte f, int g, double h, double i, double j)
 	{
 		super();
-		minFertility = a;
-		maxFertility = b;
-		minElevation = c;
-		maxElevation = d;
-		minHumidity = e;
-		maxHumidity = f;
+		setMinFertility(a);
+		setMaxFertility(b);
+		setMinElevation(c);
+		setMaxElevation(d);
+		setMinHumidity(e);
+		setMaxHumidity(f);
 		density = g;
 		growthRate = h;
 		plantRate = i;
@@ -74,6 +78,166 @@ public abstract class Crop extends Item
 		return status;
 	}
 	
+	/**
+	 * @return the minFertility
+	 */
+	public int getMinFertility()
+	{
+		return minFertility;
+	}
+	
+	/**
+	 * @param minFertility the minFertility to set
+	 */
+	public void setMinFertility(byte minFertility)
+	{
+		this.minFertility = minFertility;
+	}
+
+	/**
+	 * @return the optimalFertility
+	 */
+	public byte getOptimalFertility()
+	{
+		return optimalFertility;
+	}
+
+	/**
+	 * @param optimalFertility the optimalFertility to set
+	 */
+	public void setOptimalFertility(byte optimalFertility)
+	{
+		this.optimalFertility = optimalFertility;
+	}
+
+	/**
+	 * @return the maxFertility
+	 */
+	public int getMaxFertility()
+	{
+		return maxFertility;
+	}
+
+	/**
+	 * @param maxFertility the maxFertility to set
+	 */
+	public void setMaxFertility(byte maxFertility)
+	{
+		this.maxFertility = maxFertility;
+	}
+
+	/**
+	 * @return the minElevation
+	 */
+	public int getMinElevation()
+	{
+		return minElevation;
+	}
+
+	/**
+	 * @param minElevation the minElevation to set
+	 */
+	public void setMinElevation(byte minElevation)
+	{
+		this.minElevation = minElevation;
+	}
+
+	/**
+	 * @return the optimalElevation
+	 */
+	public byte getOptimalElevation()
+	{
+		return optimalElevation;
+	}
+
+	/**
+	 * @param optimalElevation the optimalElevation to set
+	 */
+	public void setOptimalElevation(byte optimalElevation)
+	{
+		this.optimalElevation = optimalElevation;
+	}
+
+	/**
+	 * @return the maxElevation
+	 */
+	public int getMaxElevation()
+	{
+		return maxElevation;
+	}
+
+	/**
+	 * @param maxElevation the maxElevation to set
+	 */
+	public void setMaxElevation(byte maxElevation)
+	{
+		this.maxElevation = maxElevation;
+	}
+
+	/**
+	 * @return the minHumidity
+	 */
+	public int getMinHumidity()
+	{
+		return minHumidity;
+	}
+
+	/**
+	 * @param minHumidity the minHumidity to set
+	 */
+	public void setMinHumidity(byte minHumidity)
+	{
+		this.minHumidity = minHumidity;
+	}
+
+	/**
+	 * @return the optimalHumidity
+	 */
+	public byte getOptimalHumidity()
+	{
+		return optimalHumidity;
+	}
+
+	/**
+	 * @param optimalHumidity the optimalHumidity to set
+	 */
+	public void setOptimalHumidity(byte optimalHumidity)
+	{
+		this.optimalHumidity = optimalHumidity;
+	}
+
+	/**
+	 * @return the maxHumidity
+	 */
+	public int getMaxHumidity()
+	{
+		return maxHumidity;
+	}
+
+	/**
+	 * @param maxHumidity the maxHumidity to set
+	 */
+	public void setMaxHumidity(byte maxHumidity)
+	{
+		this.maxHumidity = maxHumidity;
+	}
+
+	/**
+	 * @return the spread
+	 */
+	public boolean isSpread()
+	{
+		return spread;
+	}
+
+	/**
+	 * @param spread the spread to set
+	 */
+	public void setSpread(boolean spread)
+	{
+		this.spread = spread;
+	}
+
 	public double plantRate(byte b)
 	{
 		if(status != 0)
@@ -167,6 +331,31 @@ public abstract class Crop extends Item
 	public boolean hasGrown()
 	{
 		return status >= 100.0;
+	}
+
+	/*
+	 * Override Methods
+	 */
+	
+	@Override
+	public void actionPerformed(ActionEvent arg0)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void noHP()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void noDurability()
+	{
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
